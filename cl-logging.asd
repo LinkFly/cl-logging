@@ -8,6 +8,7 @@
 (defsystem :cl-logging
   :version "0.0.1"
   :depends-on (:lift :cl-fad :local-time :iterate :anaphora :alexandria)
-  :components ((:module "src"
-			:components ((:file "logger")))))
+  :components ((:module "src"			
+			:components ((:file "logger")
+				     (:file "save-init-hooks-port" :depends-on ("logger"))))))
 				     

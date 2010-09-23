@@ -6,8 +6,7 @@
 	   #:log-type-message
 	   #:open-log-types-streams
 	   #:close-log-types-streams
-	   #:switch-log-type
-	   #:enable-log-type
+	   #:switch-log-type	   #:enable-log-type
 	   #:for-test-created-logs
 	   #:for-test-generated-functions))
 
@@ -231,7 +230,6 @@
        (defun ,(log-message) (type fmt-message &rest args)
 	 (apply #'log-type-message type ,(*log-types-streams*) ,(*log-types-switches*) fmt-message args))
 
-
        ,@(loop for type in log-types 
 	    collect `(defun ,(funcall (fn-gen-fn-name) type) (fmt-message &rest args)
 		       (apply #',(log-message) ,type fmt-message args)))
@@ -253,7 +251,10 @@
        ,@(loop for type in log-types
 	    collect `(defun ,(gen-fn-name-enable-p type) ()
 			 (enable-log-type-p ,type ,(*log-types-switches*))))
-       (,(open-log-streams)))))
+       (,(open-log-streams))
+
+       (save-init-hooks :save (symbol-function ',(close-log-streams))
+			:init (symbol-function ',(open-log-streams))))))
 (addtest define-logging-test
   (ensure-same
    (macroexpand-1 '(define-logging
